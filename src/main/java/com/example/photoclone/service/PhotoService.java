@@ -13,7 +13,7 @@ import java.util.UUID;
 public class PhotoService {
 
     private HashMap<String, Photo> db = new HashMap<>(){{
-        put("1",new Photo("1","photo.jpeg"));
+        put("1",new Photo( "1","photo.jpeg","jpeg"));
     }};
 
     public List<Photo> getAllPhotos() {
@@ -29,6 +29,7 @@ public class PhotoService {
         photo.setId(UUID.randomUUID().toString());
         photo.setFileName(file.getOriginalFilename());
         photo.setData(file.getBytes());
+        photo.setContentType(file.getContentType());
         db.put(photo.getId(), photo);
     }
 }

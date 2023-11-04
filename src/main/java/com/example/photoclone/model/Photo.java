@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotEmpty;
 
 public class Photo {
+    private  String contentType;
     private String id;
 
     @NotEmpty
@@ -20,7 +21,16 @@ public class Photo {
         this.data = data;
     }
 
-    public Photo(String id, String fileName) {
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public Photo(String id, String fileName,String contentType) {
+        this.contentType = contentType;
         this.id = id;
         this.fileName = fileName;
     }
