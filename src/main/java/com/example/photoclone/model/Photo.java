@@ -1,5 +1,6 @@
 package com.example.photoclone.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotEmpty;
 
 public class Photo {
@@ -8,12 +9,24 @@ public class Photo {
     @NotEmpty
     private String fileName;
 
-//    public Photo() {
-//    }
+    @JsonIgnore
+    private byte[] data;
+
+    public byte[] getData() {
+        return data;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
+    }
 
     public Photo(String id, String fileName) {
         this.id = id;
         this.fileName = fileName;
+    }
+
+    public Photo() {
+
     }
 
     public String getId() {

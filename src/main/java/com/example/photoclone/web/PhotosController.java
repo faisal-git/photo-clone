@@ -1,25 +1,24 @@
-package com.example.photoclone;
+package com.example.photoclone.web;
 
 import com.example.photoclone.model.Photo;
-import jakarta.validation.Valid;
+import com.example.photoclone.service.PhotoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.HashMap;
+import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @RestController
 public class PhotosController {
 
-    private HashMap<String,Photo> db = new HashMap<>(){{
-        put("1",new Photo("id","photo.jpeg"));
-    }};
+    private final PhotoService photoService;
 
-    //private List<Photo> db = List.of(new Photo("id","photo.jpeg"));
+    public PhotosController(PhotoService photoService ){
+        this.photoService = photoService;
+    }
 
     @GetMapping("/")
     public String entryPoint(){
@@ -28,21 +27,18 @@ public class PhotosController {
 
     @GetMapping("/photos")
     public List<Photo> getPhoto(){
-        return db.values().stream().toList();
+        return photoService.getAllPhotos();
     }
 
     @GetMapping("/photos/{id}")
     public Photo getPhotoWithId(@PathVariable String id){
-        Photo photo = db.get(id);
+        Photo photo = photoService.getPhotoWith(id);
         if ( photo ==  null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         return photo;
     }
 
     @PostMapping("/photos/add")
-    public Photo createPhoto(@RequestBody @Valid Photo photo){
-        String id = UUID.randomUUID().toString();
-        photo.setId(id);
-        db.put(id,photo);
-        return photo;
+    public void createPhoto(@RequestPart("data") MultipartFile file) throws IOException {
+        photoService.addPhoto(file);
     }
 }
