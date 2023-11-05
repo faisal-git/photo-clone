@@ -1,35 +1,33 @@
 package com.example.photoclone.service;
 
 import com.example.photoclone.model.Photo;
+import com.example.photoclone.repository.PhotoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
 
 @Service
 public class PhotoService {
+    private final PhotoRepository photoRepository;
 
-    private HashMap<String, Photo> db = new HashMap<>(){{
-        put("1",new Photo( "1","photo.jpeg","jpeg"));
-    }};
-
-    public List<Photo> getAllPhotos() {
-        return db.values().stream().toList();
+    PhotoService(PhotoRepository photoRepository){
+        this.photoRepository = photoRepository;
     }
 
-    public Photo getPhotoWith(String id) {
-        return db.get(id);
+    public Iterable<Photo> getAllPhotos() {
+        return photoRepository.findAll();
+    }
+
+    public Photo getPhotoWith(Integer id) {
+        return photoRepository.findById(id).orElse(null);
     }
 
     public void addPhoto(MultipartFile file) throws IOException {
         Photo photo = new Photo();
-        photo.setId(UUID.randomUUID().toString());
         photo.setFileName(file.getOriginalFilename());
         photo.setData(file.getBytes());
         photo.setContentType(file.getContentType());
-        db.put(photo.getId(), photo);
+        photoRepository.save(photo);
     }
 }

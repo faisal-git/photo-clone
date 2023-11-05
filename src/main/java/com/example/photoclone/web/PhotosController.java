@@ -8,8 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
 
 @RestController
 public class PhotosController {
@@ -26,12 +24,12 @@ public class PhotosController {
     }
 
     @GetMapping("/photos")
-    public List<Photo> getPhoto(){
+    public Iterable<Photo> getPhoto(){
         return photoService.getAllPhotos();
     }
 
     @GetMapping("/photos/{id}")
-    public Photo getPhotoWithId(@PathVariable String id){
+    public Photo getPhotoWithId(@PathVariable Integer id){
         Photo photo = photoService.getPhotoWith(id);
         if ( photo ==  null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         return photo;
